@@ -1,11 +1,9 @@
-# This is a sample Python script.
 import openai
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
 import pandas as pd
 import numpy as np
 from openai.embeddings_utils import cosine_similarity, get_embedding
 openai.api_key = "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"
+
 
 def search_db(search_embeddings, csv_path, topk=5) -> dict:
     ''' 对单个dataframe里的进行搜索 '''
@@ -34,6 +32,7 @@ def get_prompt(content_list, question):
     '''
     return prompt
 
+
 def get_general_answer(content):
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
@@ -47,15 +46,16 @@ def get_general_answer(content):
     else:
         return response["choices"][0]["message"]["content"]
 
-# Press the green button in the gutter to run the script.
+
+def main(question, csv_path=r"data\book\400_emb.csv"):
+    search_embeddings = get_embedding(question)
+    candidate_answers = search_db(search_embeddings, csv_path, 5)
+    prompt = get_prompt(list(candidate_answers.keys()), question)
+    response = get_general_answer(prompt)
+    return response
+
+
 if __name__ == '__main__':
     question = "月经多少天来一次正常？"
-    csv_path = r"D:\tools\400_1_emb.csv"
-    search_embeddings = get_embedding(question)
-
-    candidate_answers = search_db(search_embeddings, csv_path, 5)
-
-    prompt = get_prompt(list(candidate_answers.keys()), question)
-
-    response = get_general_answer(prompt)
+    response = main(question)
     print(response)
