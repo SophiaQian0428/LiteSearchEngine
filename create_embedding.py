@@ -11,7 +11,6 @@ key_list = [
 ]
 openai.api_key = key_list[last_key_idx]
 
-
 def switch_api_key():
     global last_key_idx
     current_key_idx = (last_key_idx+1) % len(key_list)
