@@ -25,7 +25,8 @@
 
 ![](./assets/adjusted_cosine_similarity.jpg)
 
-```ACS(A, B) = \frac{(A-m_{A,B})\cdot B-m_{A,B}}{\parallel A-m_{A,B}\parallel \times \parallel B-m_{A,B}\parallel } =\sum_{n}^{i=1} \frac{(A_i-m_{A,B})\times (B_i-m_{A,B})}{\sqrt{\sum_{n}^{i=1} (A_i-m_{A,B})^2} \times \sqrt{\sum_{n}^{i=1} (B_i-m_{A,B})^2}}
+```
+ACS(A, B) = \frac{(A-m_{A,B})\cdot B-m_{A,B}}{\parallel A-m_{A,B}\parallel \times \parallel B-m_{A,B}\parallel } =\sum_{n}^{i=1} \frac{(A_i-m_{A,B})\times (B_i-m_{A,B})}{\sqrt{\sum_{n}^{i=1} (A_i-m_{A,B})^2} \times \sqrt{\sum_{n}^{i=1} (B_i-m_{A,B})^2}}
 where
 m_{A,B} = \frac{\sum_{i=1}^{n} A_i + \sum_{i=1}^{n} B_i}{2n}
 ```
