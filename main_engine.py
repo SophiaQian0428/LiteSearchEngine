@@ -48,7 +48,7 @@ def get_general_answer(content):
 
 
 def main(question, csv_path=r"data\book\400_emb.csv"):
-    search_embeddings = get_embedding(question)
+    search_embeddings = get_embedding(question, engine="text-embedding-ada-002")
     candidate_answers = search_db(search_embeddings, csv_path, 5)
     prompt = get_prompt(list(candidate_answers.keys()), question)
     response = get_general_answer(prompt)
