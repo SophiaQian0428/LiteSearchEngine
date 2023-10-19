@@ -54,7 +54,7 @@ def create_result_csv(question_list_txt, output_csv_path):
         print(f"=========================")
         df.loc[len(df.index)] = [question, chatbot_result, ours_result]
 
-    df.to_csv(output_csv_path, encoding="ANSI")
+    df.to_csv(output_csv_path, encoding="ANSI", index = False)
 
 
 if __name__ == '__main__':
