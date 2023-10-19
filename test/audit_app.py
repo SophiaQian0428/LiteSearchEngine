@@ -58,9 +58,11 @@ class MyWindow(QMainWindow):
 
 
     def on_click_left(self, event):
+        self.reset_panel(self.right_panel)
         self.highlight_panel(self.left_panel)
 
     def on_click_right(self, event):
+        self.reset_panel(self.left_panel)
         self.highlight_panel(self.right_panel)
 
     def on_double_click_left(self, event):
@@ -87,8 +89,8 @@ class MyWindow(QMainWindow):
         if self.entry_idx >= len(self.df):
             self.df["audit_result"] = self.results
             new_csv_path = f"{os.path.splitext(os.path.basename(self.csv_path))[0]}_" \
-                           f"a={self.resulta_rank_count/self.resulta_rank_count+self.resultb_rank_count:.2f}_" \
-                           f"b={self.resultb_rank_count/self.resulta_rank_count+self.resultb_rank_count:.2f}.csv"
+                           f"a={self.resulta_rank_count/(self.resulta_rank_count+self.resultb_rank_count):.2f}_" \
+                           f"b={self.resultb_rank_count/(self.resulta_rank_count+self.resultb_rank_count):.2f}.csv"
             self.df.to_csv(new_csv_path, encoding="ANSI")
             app = QApplication.instance()
             app.quit()
