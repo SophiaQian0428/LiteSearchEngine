@@ -1,8 +1,10 @@
 import openai
 import pandas as pd
 import numpy as np
-from openai.embeddings_utils import cosine_similarity, get_embedding
-openai.api_key = "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"
+from openai.embeddings_utils import get_embedding
+from similarity import euclidean_distance_similarity, cosine_similarity, adjusted_cosine_similarity
+
+openai.api_key = "sk-?"
 
 
 def search_db(search_embeddings, csv_path, topk=5) -> dict:
@@ -27,8 +29,8 @@ def search_db(search_embeddings, csv_path, topk=5) -> dict:
 def get_prompt(content_list, question):
     prompt = f'''
     给定的参考信息为:{content_list}
-    你收到了一个问题：{question}
-    如果参考信息中没有内容能作为依据回答问题请返回“对不起，我无法提供相关具体信息，因为我的知识库中并没有包含这方面的信息。”，如果参考信息中存在内容能作为依据回答问题，请以儿童医生的口吻回答该问题。请注意，必须按照参考信息提供的内容进行回答，不得进行任何增删改。
+    你是一个生理课老师，收到了处在青春期的女学生的一个问题：{question}
+    如果参考信息中没有内容能作为依据回答问题请返回“对不起，我无法提供相关具体信息，因为我的知识库中并没有包含这方面的信息。”，如果参考信息中存在内容能作为依据回答问题，请温和亲切地回答该问题。请注意，必须按照参考信息提供的内容进行回答，不得进行任何增删改。
     '''
     return prompt
 
