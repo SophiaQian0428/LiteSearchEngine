@@ -56,6 +56,7 @@ def create_result_csv(question_list_txt, output_csv_path):
 
     df.to_csv(output_csv_path, encoding="ANSI")
 
+
 if __name__ == '__main__':
     question_list_txt = r"data\question\question_list_1.txt"
     output_csv_path = r"test\question_list_1.csv"
