@@ -1,6 +1,8 @@
-import openai
 import pandas as pd
 import numpy as np
+import json
+import requests
+import openai
 from openai.embeddings_utils import get_embedding
 from similarity import euclidean_distance_similarity, cosine_similarity, adjusted_cosine_similarity
 
@@ -55,6 +57,45 @@ def main(question, csv_path=r"data\book\400_emb.csv"):
     prompt = get_prompt(list(candidate_answers.keys()), question)
     response = get_general_answer(prompt)
     return response
+
+#----------------------------------------------- Baidu Ernie ------------------------------------------------
+ERNIE_API_KEY = ""
+ERNIE_SECRET_KEY = ""
+ERNIE_ACCESS_TOKEN_URL = "https://aip.baidubce.com/oauth/2.0/token"
+ERNIE_EMBEDDING_URL = "https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/embeddings/embedding-v1?access_token="
+ERNIE_CHAT_URL = "https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/completions?access_token="
+ERNIE_HEADERS = {'Content-Type': 'application/json'}
+def get_ernie_embedding(search_term):
+    payload = json.dumps({
+        "input": [search_term]
+    })
+    response = requests.request("POST", ERNIE_EMBEDDING_URL + get_ernie_access_token(),
+                                headers=ERNIE_HEADERS, data=payload)
+
+    return list(eval(response.text)["data"][0]["embedding"])
+
+def get_ernie_general_answer(content):
+    payload = {"messages":
+        [{
+            "role": "user",
+            "content": content
+        }]
+    }
+    response = requests.request("POST", ERNIE_CHAT_URL + get_ernie_access_token(), headers=ERNIE_HEADERS, data=json.dumps(payload))
+    output = json.loads(response.text)
+    return output["result"]
+
+def get_ernie_access_token():
+    params = {"grant_type": "client_credentials", "client_id": ERNIE_API_KEY, "client_secret": ERNIE_SECRET_KEY}
+    return str(requests.post(ERNIE_ACCESS_TOKEN_URL, params=params).json().get("access_token"))
+
+def main_ernie(question, csv_path=r""):
+    search_embeddings = get_embedding(question)
+    candidate_answers = search_db(search_embeddings, csv_path, 5)
+    prompt = get_prompt(list(candidate_answers.keys()), question)
+    response = get_general_answer(prompt)
+    return response
+
 
 
 if __name__ == '__main__':
