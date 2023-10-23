@@ -66,7 +66,7 @@ def create_embedding_from_txt(source_txt_path, output_csv_path):
 
 if __name__ == '__main__':
     source_txt_path = r"data\book\400.txt"
-    output_csv_path = r"data\book\400_emb.csv"
+    output_csv_path = r"data\book\400_gpt35_emb.csv"
     try:
         create_embedding_from_txt(source_txt_path, output_csv_path)
     except KeyboardInterrupt:
