@@ -1,13 +1,18 @@
 import inspect, re
 import pandas as pd
 import openai
-from main_engine import main as OurChatCompletion
+from main_engine import main as OurChatCompletionGPT35
+from main_engine import main_ernie as OurChatCompletionERNIE
 from main_engine import get_general_answer as OpenaiChatCompletion
 from similarity import euclidean_distance_similarity, cosine_similarity, adjusted_cosine_similarity
 
-OurChatCompletionEDS = lambda text: OurChatCompletion(text, similarity_method=euclidean_distance_similarity)
-OurChatCompletionCS = lambda text: OurChatCompletion(text, similarity_method=cosine_similarity)
-OurChatCompletionACS = lambda text: OurChatCompletion(text, similarity_method=adjusted_cosine_similarity)
+OurChatCompletionGPT35EDS = lambda text: OurChatCompletionGPT35(text, similarity_method=euclidean_distance_similarity)
+OurChatCompletionGPT35CS = lambda text: OurChatCompletionGPT35(text, similarity_method=cosine_similarity)
+OurChatCompletionGPT35ACS = lambda text: OurChatCompletionGPT35(text, similarity_method=adjusted_cosine_similarity)
+
+OurChatCompletionERNIEEDS = lambda text: OurChatCompletionERNIE(text, similarity_method=euclidean_distance_similarity)
+OurChatCompletionERNIECS = lambda text: OurChatCompletionERNIE(text, similarity_method=cosine_similarity)
+OurChatCompletionERNIEACS = lambda text: OurChatCompletionERNIE(text, similarity_method=adjusted_cosine_similarity)
 
 
 last_key_idx = 0
