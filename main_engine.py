@@ -6,17 +6,17 @@ import openai
 from openai.embeddings_utils import get_embedding
 from similarity import euclidean_distance_similarity, cosine_similarity, adjusted_cosine_similarity
 
-openai.api_key = "sk-?"
+openai.api_key = "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"
 
 
-def search_db(search_embeddings, csv_path, topk=5) -> dict:
+def search_db(search_embeddings, csv_path, similarity_method=cosine_similarity, topk=5) -> dict:
     ''' 对单个dataframe里的进行搜索 '''
     df = pd.read_csv(csv_path, encoding="ANSI")
     # print(df)
     df["embedding"] = df["embedding"].apply(eval).apply(np.array)
 
     df["similarity"] = df["embedding"].apply(
-        lambda x: cosine_similarity(x, search_embeddings)
+        lambda x: similarity_method(x, search_embeddings)
     )
 
     results = df.sort_values("similarity", ascending=False).head(topk)
@@ -51,16 +51,16 @@ def get_general_answer(content):
         return response["choices"][0]["message"]["content"]
 
 
-def main(question, csv_path=r"data\book\400_emb.csv"):
+def main(question, csv_path=r"data\book\400_emb.csv", similarity_method=cosine_similarity):
     search_embeddings = get_embedding(question, engine="text-embedding-ada-002")
-    candidate_answers = search_db(search_embeddings, csv_path, 5)
+    candidate_answers = search_db(search_embeddings, csv_path, similarity_method, 5)
     prompt = get_prompt(list(candidate_answers.keys()), question)
     response = get_general_answer(prompt)
     return response
 
 #----------------------------------------------- Baidu Ernie ------------------------------------------------
-ERNIE_API_KEY = ""
-ERNIE_SECRET_KEY = ""
+ERNIE_API_KEY = "manSsMGCFYGDbIVwfqaCuVQs"
+ERNIE_SECRET_KEY = "4Z7P1VPcH2m0P2qPR24NO7ixAqpRmued"
 ERNIE_ACCESS_TOKEN_URL = "https://aip.baidubce.com/oauth/2.0/token"
 ERNIE_EMBEDDING_URL = "https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/embeddings/embedding-v1?access_token="
 ERNIE_CHAT_URL = "https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/completions?access_token="
@@ -71,7 +71,7 @@ def get_ernie_embedding(search_term):
     })
     response = requests.request("POST", ERNIE_EMBEDDING_URL + get_ernie_access_token(),
                                 headers=ERNIE_HEADERS, data=payload)
-
+    print(response.text)
     return list(eval(response.text)["data"][0]["embedding"])
 
 def get_ernie_general_answer(content):
@@ -89,16 +89,17 @@ def get_ernie_access_token():
     params = {"grant_type": "client_credentials", "client_id": ERNIE_API_KEY, "client_secret": ERNIE_SECRET_KEY}
     return str(requests.post(ERNIE_ACCESS_TOKEN_URL, params=params).json().get("access_token"))
 
-def main_ernie(question, csv_path=r""):
-    search_embeddings = get_embedding(question)
+def main_ernie(question, csv_path=r"data/book/400_ernie_emb.csv"):
+    search_embeddings = get_ernie_embedding(question)
+    print(search_embeddings)
     candidate_answers = search_db(search_embeddings, csv_path, 5)
     prompt = get_prompt(list(candidate_answers.keys()), question)
-    response = get_general_answer(prompt)
+    response = get_ernie_general_answer(prompt)
     return response
 
 
 
 if __name__ == '__main__':
     question = "月经多少天来一次正常？"
-    response = main(question)
+    response = main_ernie(question)
     print(response)
