@@ -56,8 +56,8 @@ def create_result_csv(question_list_txt, output_csv_path):
         questions = fp.readlines()
 
     df = pd.DataFrame({"question":[], "result_a":[], "result_b":[]})
-    method_a = OurChatCompletionCS
-    method_b = OurChatCompletionEDS
+    method_a = OurChatCompletionGPT35CS
+    method_b = OurChatCompletionGPT35EDS
     for question in questions:
         question = question.strip()
 

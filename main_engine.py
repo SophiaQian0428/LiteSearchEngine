@@ -51,7 +51,7 @@ def get_general_answer(content):
         return response["choices"][0]["message"]["content"]
 
 
-def main(question, csv_path=r"data\book\400_emb.csv", similarity_method=cosine_similarity):
+def main(question, csv_path=r"data\book\400_gpt35_emb.csv", similarity_method=cosine_similarity):
     search_embeddings = get_embedding(question, engine="text-embedding-ada-002")
     candidate_answers = search_db(search_embeddings, csv_path, similarity_method, 5)
     prompt = get_prompt(list(candidate_answers.keys()), question)
@@ -89,7 +89,7 @@ def get_ernie_access_token():
     params = {"grant_type": "client_credentials", "client_id": ERNIE_API_KEY, "client_secret": ERNIE_SECRET_KEY}
     return str(requests.post(ERNIE_ACCESS_TOKEN_URL, params=params).json().get("access_token"))
 
-def main_ernie(question, csv_path=r"data/book/400_ernie_emb.csv"):
+def main_ernie(question, csv_path=r"data/book/400_ernie_emb.csv", similarity_method=cosine_similarity):
     search_embeddings = get_ernie_embedding(question)
     print(search_embeddings)
     candidate_answers = search_db(search_embeddings, csv_path, 5)
