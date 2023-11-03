@@ -3,7 +3,8 @@ import matplotlib
 import matplotlib.pyplot as plt
 
 def get_vote(expert_result_root, question_number):
-    return "ACS"
+    import random
+    return random.choice(["ACS", "CS", "EDS"])
 
 
 def draw_figure1(question_file, source_root, output_root):
@@ -41,7 +42,7 @@ def draw_figure1(question_file, source_root, output_root):
         for i, m in enumerate(methods):
             if m in vote_dict:
                 values[i].append(vote_dict[m])
-
+    print(values)
     plt.figure(figsize=(16, 9), dpi=80)
     plt.hist(values, len(ys), stacked=True, density=False,
              color=colors[:len(methods)], orientation='horizontal')
