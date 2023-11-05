@@ -1,7 +1,7 @@
 # LiteSearchEngine
-## Search Engine for Tibetan Women
+### Search Engine for Tibetan Women
 
-![](https://imgs.shields.io/badge/test-OK-green.svg)
+![](https://imgs.shields.io/badge/test-OK-green)
 
 ---
 
